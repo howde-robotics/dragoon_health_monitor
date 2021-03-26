@@ -6,7 +6,6 @@ from nav_msgs import Odometry
 from geometry_msgs import TwistWithCovarianceStamped
 from sensor_msgs import Imu
 
-
 class PythonNode():
     def __init__(self):
         # declare params, subscriber and publisher

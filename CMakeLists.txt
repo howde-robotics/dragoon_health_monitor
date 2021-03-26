@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.2)
-project(health_monitor VERSION 0.0.1)
+project(dragoon_health_monitor VERSION 0.0.1)
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++17 -pthread")
 
 find_package(catkin REQUIRED COMPONENTS
@@ -34,10 +34,10 @@ include_directories(
 
 # add executables from your source code, i.e. compile it
 # .py code are not included here as they do not need to be compiled
-add_executable(simple_node 
+add_executable(health_monitor
   src/simple_node/simple_node.cpp
 )
-add_library(myAlgo src/myAlgo.cpp)
+add_library(health_monitor_main src/myAlgo.cpp)
 
 if(CATKIN_ENABLE_TESTING)
 
@@ -49,16 +49,16 @@ if(CATKIN_ENABLE_TESTING)
   # ${GTEST_LIBRARIES}
   # )
 
-  catkin_add_gtest(unittest test/unittest.cpp)
-  target_link_libraries(unittest 
-  myAlgo 
+  catkin_add_gtest(test_health_monitor test/unittest.cpp)
+  target_link_libraries(test_health_monitor
+  myAlgo4
   # ${YAML_CPP_LIBRARIES}
   ${catkin_LIBRARIES} 
   ${GTEST_LIBRARIES}
   )
 endif()
 
-target_link_libraries(simple_node
-  myAlgo
+target_link_libraries(health_monitor
+  health_monitor_main
   ${catkin_LIBRARIES}
   )
