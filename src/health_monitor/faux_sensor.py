@@ -1,9 +1,11 @@
+#! /usr/bin/env python
+
 import rospy
 from dragoon_messages.msg import watchHeartbeat
 
-class fauxSensor(object):
+class FauxSensor(object):
     '''
-    A fake sensor object used to test out the health monitor node and restart cabailities
+    A fake sensor object used to test out the health monitor node and restart
     '''
 
     def __init__(self):
@@ -22,29 +24,34 @@ class fauxSensor(object):
             queue_size=5,
         )
 
-        # use the faux sensor name as node name
-        rospy.init_node(self.nodeName_)
+        while not rospy.is_shutdown():
+            self.run()
+            rospy.sleep(1.0/self.timerFreq_)
 
-    def pub(self):
+    def run(self):
         # msg type contains information to restart node
         self.heartbeatMsg_.node_pkg = "health_monitor"
         # node file
         self.heartbeatMsg_.node_type = "faux_sensor.py"
         # node name
         self.heartbeatMsg_.node_name = self.nodeName_
+        # time
+        self.heartbeatMsg_.heartbeat_time = rospy.Time.now()
+
         if self.heartbeatsPublished_ < self.heartbeatDuration_:
-            self.sensorPublisher_.publish()
+            self.sensorPublisher_.publish(self.heartbeatMsg_)
+        else:
+            rospy.loginfo("Stopped heartbeat...")
+
+        self.heartbeatsPublished_ += 1
     
-    def run(self):
-        while not rospy.is_shutdown():
-            self.pub
-            rospy.spin()
-            rospy.sleep(1.0/self.timerFreq_)
+        
+
 
 # main run loop
 if __name__ == "__main__":
-    node = fauxSensor()
+    rospy.init_node("faux_lidar_sensor")
     try:
-        node.run()    
+        node = FauxSensor()
     except rospy.ROSInitException:
         pass

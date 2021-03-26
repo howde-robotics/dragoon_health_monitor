@@ -28,7 +28,6 @@ class HealthMonitor():
 
         while not rospy.is_shutdown():
             self.run()
-            rospy.spin()
             rospy.sleep(1.0/self.timerFreq_)
 
     def run(self):
@@ -43,7 +42,7 @@ class HealthMonitor():
         self.currVel_ = msg.twist.twist.linear.x
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     rospy.init_node('health_monitor')
     try:
         node = HealthMonitor()
