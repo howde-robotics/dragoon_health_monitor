@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   rostest
   rosunit
   actionlib_msgs
+  dragoon_messages
 )
 
 generate_messages(
@@ -38,6 +39,11 @@ add_executable(health_monitor
   src/simple_node/simple_node.cpp
 )
 add_library(health_monitor_main src/myAlgo.cpp)
+
+add_dependencies(health_monitor 
+  dragoon_messages_generate_messages_cpp
+  ${catkin_EXPORTED_TARGETS}
+)
 
 if(CATKIN_ENABLE_TESTING)
 
