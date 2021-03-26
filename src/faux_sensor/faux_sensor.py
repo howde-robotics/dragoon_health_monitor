@@ -9,17 +9,36 @@ class FauxSensor(object):
     '''
 
     def __init__(self):
+        # these are the sensor hearbeat topics 
+        self.lidarTopic_ = str(rospy.get_param('lidar_beat', '/lidar_beat'))
+        self.seekTopic_ = str(rospy.get_param('seek_beat', '/seek_beat'))
+        self.realSenseTopic_ = str(rospy.get_param('realsense_beat', '/realsense_beat'))
+
+        # these are the real time status updates
+        self.peripheralTopic_ = str(rospy.get_param('peripheral_beat', '/peripheral_beat'))
+        self.humanLocalizeTopic_ = str(rospy.get_param('human_beat', '/human_beat'))
+        self.humanDetectionTopic_ = str(rospy.get_param('detection_beat', '/detection_beat'))
+
         # this is the name of the sensor to imitate, that will go in the 'node_name' field
-        self.sensorImitation_ = str(rospy.get_param("faux_sensor_imitation", "lidar"))
+        self.sensorImitation_ = str(rospy.get_param("beat_imitate", "lidar"))
         # length of heartbeat duration in heartbeats published
-        self.heartbeatDuration_ = int(rospy.get_param("faux_sensor_duration", "100"))
-        self.timerFreq_ = float(rospy.get_param('~timerFreq_', '10'))
+        self.heartbeatDuration_ = int(rospy.get_param("beat_duration", "100"))
+        self.timerFreq_ = float(rospy.get_param('beat_rate', '10'))
         self.nodeName_ = "faux_" + self.sensorImitation_ + "_publisher"
+
+        beatsToMimic_ = {
+            "lidar"     : self.lidarTopic_,
+            "seek"      : self.seekTopic_,
+            "realsense" : self.realSenseTopic_,
+            "peripheral": self.peripheralTopic_,
+            "localize"  : self.humanLocalizeTopic_,
+            "detection" : self.humanDetectionTopic_
+            }
 
         self.heartbeatsPublished_ = 0
         self.heartbeatMsg_ = watchHeartbeat()
         self.sensorPublisher_ = rospy.Publisher(
-            "/test_heartbeat",
+            beatsToMimic_[self.sensorImitation_],
             watchHeartbeat,
             queue_size=5,
         )
@@ -41,7 +60,8 @@ class FauxSensor(object):
         if self.heartbeatsPublished_ < self.heartbeatDuration_:
             self.sensorPublisher_.publish(self.heartbeatMsg_)
         else:
-            rospy.loginfo("Stopped heartbeat...")
+            rospy.loginfo("[FAUX SENSOR] Stopped heartbeat after %d publications." % self.heartbeatsPublished_)
+            rospy.signal_shutdown("[FAUX SENSOR] Completed mimicry of %s system." % self.sensorImitation_)
 
         self.heartbeatsPublished_ += 1
     
