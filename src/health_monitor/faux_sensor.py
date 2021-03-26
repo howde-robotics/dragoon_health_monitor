@@ -2,6 +2,10 @@ import rospy
 from dragoon_messages.msg import watchHeartbeat
 
 class fauxSensor(object):
+    '''
+    A fake sensor object used to test out the health monitor node and restart cabailities
+    '''
+
     def __init__(self):
         # this is the name of the sensor to imitate, that will go in the 'node_name' field
         self.sensorImitation_ = str(rospy.get_param("faux_sensor_imitation", "lidar"))
@@ -18,6 +22,9 @@ class fauxSensor(object):
             queue_size=5,
         )
 
+        # use the faux sensor name as node name
+        rospy.init_node(self.nodeName_)
+
     def pub(self):
         # msg type contains information to restart node
         self.heartbeatMsg_.node_pkg = "health_monitor"
@@ -29,7 +36,6 @@ class fauxSensor(object):
             self.sensorPublisher_.publish()
     
     def run(self):
-        rospy.init_node(self.nodeName_)
         while not rospy.is_shutdown():
             self.pub
             rospy.spin()
@@ -38,7 +44,6 @@ class fauxSensor(object):
 # main run loop
 if __name__ == "__main__":
     node = fauxSensor()
-
     try:
         node.run()    
     except rospy.ROSInitException:

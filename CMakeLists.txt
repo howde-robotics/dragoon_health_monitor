@@ -35,36 +35,36 @@ include_directories(
 
 # add executables from your source code, i.e. compile it
 # .py code are not included here as they do not need to be compiled
-add_executable(health_monitor
-  src/simple_node/simple_node.cpp
-)
-add_library(health_monitor_main src/myAlgo.cpp)
+# add_executable(health_monitor
+#   src/simple_node/simple_node.cpp
+# )
+# add_library(health_monitor_main src/myAlgo.cpp)
 
-add_dependencies(health_monitor 
-  dragoon_messages_generate_messages_cpp
-  ${catkin_EXPORTED_TARGETS}
-)
+# add_dependencies(health_monitor 
+#   dragoon_messages_generate_messages_cpp
+#   ${catkin_EXPORTED_TARGETS}
+# )
 
-if(CATKIN_ENABLE_TESTING)
+# if(CATKIN_ENABLE_TESTING)
 
-  find_package(rostest REQUIRED)
+#   find_package(rostest REQUIRED)
 
-  # add_rostest_gtest(myrostest test/rostest.launch test/rostest.cpp)
-  # target_link_libraries(myrostest 
-  # ${catkin_LIBRARIES} 
-  # ${GTEST_LIBRARIES}
-  # )
+#   # add_rostest_gtest(myrostest test/rostest.launch test/rostest.cpp)
+#   # target_link_libraries(myrostest 
+#   # ${catkin_LIBRARIES} 
+#   # ${GTEST_LIBRARIES}
+#   # )
 
-  catkin_add_gtest(test_health_monitor test/unittest.cpp)
-  target_link_libraries(test_health_monitor
-  myAlgo4
-  # ${YAML_CPP_LIBRARIES}
-  ${catkin_LIBRARIES} 
-  ${GTEST_LIBRARIES}
-  )
-endif()
+#   catkin_add_gtest(test_health_monitor test/unittest.cpp)
+#   target_link_libraries(test_health_monitor
+#   myAlgo4
+#   # ${YAML_CPP_LIBRARIES}
+#   ${catkin_LIBRARIES} 
+#   ${GTEST_LIBRARIES}
+#   )
+# endif()
 
-target_link_libraries(health_monitor
-  health_monitor_main
-  ${catkin_LIBRARIES}
-  )
+# target_link_libraries(health_monitor
+#   health_monitor_main
+#   ${catkin_LIBRARIES}
+#   )
