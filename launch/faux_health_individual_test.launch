@@ -1,0 +1,23 @@
+<launch>
+<!-- set the variables here -->
+  <arg name="beat_imitate" default="lidar" doc="name of the sensor heartbeat to imitate"/>
+  <arg name="beat_duration" default="100" doc="length of time to publish heartbeats"/>
+  <arg name="beat_rate" default="20.0" doc="frequency of heartbeat publishing"/>
+  <arg name="error_thres" default="2.5" doc="The time threshold after which an error is registered"/>
+  <arg name="restart_thres" default="5" doc="The time threshold after which a node restart is attempted"/>
+  <arg name="restart_flag" default="False" doc="Whether or not to attempt to restart a node"/>
+
+<!-- set the launcher parameters here -->
+  <node pkg="dragoon_health_monitor" type="health_monitor.py" name="health_monitor_test" output="screen">
+    <param name="error_thres" value="$(arg error_thres)" type="double"/>
+    <param name="restart_thres" value="$(arg restart_thres)" type="double"/>
+    <param name="restart_flag" value="$(arg restart_flag)" type="bool"/>
+  </node>
+
+  <node pkg="dragoon_health_monitor" type="faux_sensor.py" name="faux_sensor_beat" output="screen">
+    <param name="beat_imitate" value="$(arg beat_imitate)" type="string"/>
+    <param name="beat_duration" value="$(arg beat_duration)" type ="int"/>
+    <param name="timerFreq_" value="$(arg beat_rate)" type ="double"/>
+  </node>
+
+</launch>
