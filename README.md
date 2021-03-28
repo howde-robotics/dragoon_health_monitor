@@ -12,6 +12,9 @@ There are several launch files in here right now. Anything with "faux" in front 
 
 ## Architecture
 
+### Inputs
+The inputs are each heartbeat message from every active subsystem node. The user can also specify the rate that the health monitor runs at with a ROS param, shown in its [launch file](launch/health_monitor.launch).
+
 To determine what topic each system heartbeat should be published to, refer to this launch file [of global parameters](launch/health_global_params.launch). The DHM will use these parameters to select the topics it reads from. 
 Here is an architecture for the system:
 
