@@ -44,6 +44,8 @@ class HealthMonitor():
         self.restartThreshold = float(rospy.get_param('~restart_thres', '5'))
         # whether or not to restart
         self.restartNodesFlag = bool(rospy.get_param('~restart_flag', 'False'))
+        # health monitor rate
+        self.timerFreq_ = float(rospy.get_param('~monitor_rate', '20'))
 
         # run the node
         self.rosInterface()
@@ -88,8 +90,6 @@ class HealthMonitor():
 
 
     def rosInterface(self):
-        # health monitor rate
-        self.timerFreq_ = float(rospy.get_param('~monitor_rate', '20'))
         # global sensor hearbeat topics 
         self.lidarTopic     = str(rospy.get_param('lidar_beat', '/lidar_beat'))
         self.seekTopic      = str(rospy.get_param('seek_beat', '/seek_beat'))

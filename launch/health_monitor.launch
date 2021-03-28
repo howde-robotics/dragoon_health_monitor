@@ -1,0 +1,19 @@
+<launch>
+	<!-- set the variables here -->
+	<include file="$(find dragoon_health_monitor)/launch/health_global_params.launch" />
+
+    <arg name="error_thres" default="2.5"     doc="The time threshold after which an error is registered"/>
+    <arg name="restart_thres" default="5"     doc="The time threshold after which a node restart is attempted"/>
+    <arg name="restart_flag" default="False"  doc="Whether or not to attempt to restart a node"/>
+    <arg name="monitor_rate" default="20"  doc="Rate that the monitor checks subsystem status in Hz"/>
+
+
+	<!-- set the launcher parameters here -->
+	<node pkg="dragoon_health_monitor" type="health_monitor.py" name="health_monitor_test" output="screen">
+        <param name="error_thres"    value="$(arg error_thres)" type="double"/>
+        <param name="restart_thres"  value="$(arg restart_thres)" type="double"/>
+        <param name="restart_flag"   value="$(arg restart_flag)" type="bool"/>
+        <param name="monitor_rate"   value="$(arg monitor_rate)" type="double"/>
+	</node>
+
+</launch>
