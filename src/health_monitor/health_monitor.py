@@ -69,9 +69,9 @@ class HealthMonitor():
         restartThres = int(self.restartThreshold * 1e9)
 
         # see if an error has occured
-        self.checkError = self.healthTimeDiff > errorThres 
+        self.checkError = self.healthTimeDiff < errorThres 
         # see if need to restart the node
-        self.checkRestart = self.healthTimeDiff > restartThres
+        self.checkRestart = self.healthTimeDiff < restartThres
         # rospy.loginfo(self.checkRestart)
 
         for i in range(len(self.checkError)):
