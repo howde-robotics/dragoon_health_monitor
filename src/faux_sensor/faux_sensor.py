@@ -9,28 +9,22 @@ class FauxSensor(object):
     '''
 
     def __init__(self):
-        # these are the sensor hearbeat topics 
-        self.lidarTopic_ = str(rospy.get_param('lidar_beat', '/lidar_beat'))
-        self.seekTopic_ = str(rospy.get_param('seek_beat', '/seek_beat'))
+        # global sensor hearbeat topics
+        self.lidarTopic_     = str(rospy.get_param('lidar_beat', '/lidar_beat'))
+        self.seekTopic_      = str(rospy.get_param('seek_beat', '/seek_beat'))
         self.realSenseTopic_ = str(rospy.get_param('realsense_beat', '/realsense_beat'))
 
-        # these are the real time status updates
-        self.peripheralTopic_ = str(rospy.get_param('peripheral_beat', '/peripheral_beat'))
-        self.humanLocalizeTopic_ = str(rospy.get_param('human_beat', '/human_beat'))
+        #  global real time status update topics
+        self.peripheralTopic_     = str(rospy.get_param('peripheral_beat', '/peripheral_beat'))
+        self.humanLocalizeTopic_  = str(rospy.get_param('human_beat', '/human_beat'))
         self.humanDetectionTopic_ = str(rospy.get_param('detection_beat', '/detection_beat'))
 
         # this is the name of the sensor to imitate, that will go in the 'node_name' field
         self.sensorImitation_ = str(rospy.get_param("~beat_imitate", "lidar"))
-
         # length of heartbeat duration in heartbeats published
         self.heartbeatDuration_ = int(rospy.get_param("~beat_duration", "100"))
-        self.timerFreq_ = float(rospy.get_param('~beat_rate', '10'))
-        self.nodeName_ = "faux_" + self.sensorImitation_ + "_publisher"
-
-        rospy.loginfo(self.sensorImitation_)
-        rospy.loginfo(self.heartbeatDuration_)
-        rospy.loginfo(self.timerFreq_)
-        rospy.loginfo(rospy.get_param_names())
+        self.timerFreq_         = float(rospy.get_param('~beat_rate', '10'))
+        self.nodeName_          = "faux_" + self.sensorImitation_ + "_publisher"
 
         beatsToMimic_ = {
             "lidar"     : self.lidarTopic_,
@@ -42,8 +36,8 @@ class FauxSensor(object):
             }
 
         self.heartbeatsPublished_ = 0
-        self.heartbeatMsg_ = watchHeartbeat()
-        self.sensorPublisher_ = rospy.Publisher(
+        self.heartbeatMsg_        = watchHeartbeat()
+        self.sensorPublisher_     = rospy.Publisher(
             beatsToMimic_[self.sensorImitation_],
             watchHeartbeat,
             queue_size=5,
@@ -55,7 +49,7 @@ class FauxSensor(object):
 
     def run(self):
         # msg type contains information to restart node
-        self.heartbeatMsg_.system = self.sensorImitation_
+        self.heartbeatMsg_.system   = self.sensorImitation_
         self.heartbeatMsg_.node_pkg = "dragoon_health_monitor"
         # node file
         self.heartbeatMsg_.node_type = "faux_sensor.py"

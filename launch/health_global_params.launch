@@ -1,8 +1,9 @@
 <launch>
-    <param name='lidar_beat' value='/lidar_beat' type="string" />
-    <param name='seek_beat' value='/seek_beat' type="string" />
-    <param name='realsense_beat' value='/realsense_beat' type="string" />
-    <param name='/peripheral_beat' value='/peripheral_beat' type="string" />
-    <param name='human_beat' value='/human_beat' type="string" />
-    <param name='detection_beat' value='/detection_beat' type="string" />
+    <param name = "health_status"   value = "/health_status"   type = "string" />
+    <param name = 'lidar_beat'      value = '/lidar_beat'      type = "string" />
+    <param name = 'seek_beat'       value = '/seek_beat'       type = "string" />
+    <param name = 'realsense_beat'  value = '/realsense_beat'  type = "string" />
+    <param name = 'peripheral_beat' value = '/peripheral_beat' type = "string" />
+    <param name = 'human_beat'      value = '/human_beat'      type = "string" />
+    <param name = 'detection_beat'  value = '/detection_beat'  type = "string" />
 </launch>
