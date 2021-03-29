@@ -22,3 +22,7 @@ To determine what topic each system heartbeat should be published to, refer to t
 Here is an architecture for the system:
 
 ![DHM Architecture Diagram](doc/DHMA.jpg "Architecture Diagram")
+
+## Dependencies
+
+1. dragoon_messages
