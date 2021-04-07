@@ -14,9 +14,9 @@ find_package(catkin REQUIRED COMPONENTS
   dragoon_messages
 )
 
-generate_messages(
-  DEPENDENCIES actionlib_msgs std_msgs
-)
+# generate_messages(
+#   DEPENDENCIES actionlib_msgs std_msgs
+# )
 
 catkin_package(CATKIN_DEPENDS
   roscpp
