@@ -5,7 +5,7 @@ import numpy as np
 import roslaunch as rl
 from dragoon_messages.msg import watchHeartbeat, watchStatus, Objects
 from sensor_msgs.msg import Image, LaserScan, Imu
-from darknet_ros.msg import BoundingBoxes
+# from darknet_ros.msg import BoundingBoxes
 
 
 class HealthMonitor():
@@ -47,7 +47,7 @@ class HealthMonitor():
         # subtract current times from last times
         curTime = rospy.Time.now()
         self.healthTimeDiff = curTime.to_nsec() - self.healthLastTime
-        rospy.loginfo(self.healthTimeDiff)
+        # rospy.loginfo(self.healthTimeDiff)
 
         # convert thresholds to nanoseconds
         errorThres = int(self.errorThreshold * 1e9)
@@ -80,7 +80,7 @@ class HealthMonitor():
         self.realSenseDepthSub_  = rospy.Subscriber(self.realSenseDepthTopic, Image, self.realSenseDepthCallback)
         self.transformedIMUSub_  = rospy.Subscriber(self.transformedIMUTopic, Imu, self.imuCallback)
         self.humanLocalizeSub_   = rospy.Subscriber(self.humanLocalizeTopic, Objects, self.humanLocalizeCallback)
-        self.humanDetectionSub_ = rospy.Subscriber(self.humanDetectionTopic, BoundingBoxes, self.humanDetectionCallback)
+        # self.humanDetectionSub_ = rospy.Subscriber(self.humanDetectionTopic, BoundingBoxes, self.humanDetectionCallback)
 
         # status publisher
         self.statusTopic_ = str(rospy.get_param("health_status", "/health_status"))
@@ -92,6 +92,9 @@ class HealthMonitor():
         # udpates the system descriptor's array entry with last message receieved time
         sys_index = self.heartbeats.index(system)
         self.healthLastTime[sys_index] = msg.header.stamp.to_nsec()
+
+        # if want to ignore the time
+        # self.checkError[sys_index] = True
 
 
     # TODO: see if I can use just one callback...
