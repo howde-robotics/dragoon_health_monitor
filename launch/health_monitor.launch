@@ -9,7 +9,7 @@
 
 
 	<!-- set the launcher parameters here -->
-	<node pkg="dragoon_health_monitor" type="health_monitor.py" name="health_monitor_test" output="screen">
+	<node pkg="dragoon_health_monitor" type="health_monitor_simple.py" name="health_monitor" output="screen">
 		<param name="error_thres"    value="$(arg error_thres)" type="double"/>
 		<param name="restart_thres"  value="$(arg restart_thres)" type="double"/>
 		<param name="restart_flag"   value="$(arg restart_flag)" type="bool"/>
