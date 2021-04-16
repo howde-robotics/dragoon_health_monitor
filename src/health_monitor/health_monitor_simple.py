@@ -3,15 +3,18 @@
 import rospy
 import numpy as np
 import roslaunch as rl
+from tf2_ros import TransformListener, Buffer, LookupException, ConnectivityException, ExtrapolationException
 from dragoon_messages.msg import watchHeartbeat, watchStatus, Objects
+from geometry_msgs.msg import TransformStamped
 from sensor_msgs.msg import Image, LaserScan, Imu
 # from darknet_ros.msg import BoundingBoxes
+# from wire.msg import WorldEvidence
 
 
 class HealthMonitor():
     # main health monitor class
 
-    heartbeats = ['lidar', 'seek', 'realsense_rgb', 'realsense_depth', 'transformed_imu', 'localize', 'detection']
+    heartbeats = ['lidar', 'seek', 'realsense_rgb', 'realsense_depth', 'transformed_imu', 'localize', 'detection', 'detection_filtering', 'slam']
     totalBeats = len(heartbeats)
 
     def __init__(self):
@@ -47,6 +50,7 @@ class HealthMonitor():
         # subtract current times from last times
         curTime = rospy.Time.now()
         self.healthTimeDiff = curTime.to_nsec() - self.healthLastTime
+        self.slamCheck()
         # rospy.loginfo(self.healthTimeDiff)
 
         # convert thresholds to nanoseconds
@@ -71,7 +75,8 @@ class HealthMonitor():
 
         # global real time status update topics
         self.humanLocalizeTopic  = str(rospy.get_param('human_beat', '/ObjectPoses'))
-        self.humanDetectionTopic = str(rospy.get_param('detection_beat', '/darknet_ros/bounding_boxes'))
+        self.humanDetectionTopic = str(rospy.get_param('detection_beat', '/darknet_ros/detection_image'))
+        self.humanFilterTopic = str(rospy.get_param('filter_beat', '/world_state'))
 
         # the heartbeats to listen to subscribers
         self.lidarSub_           = rospy.Subscriber(self.lidarTopic, LaserScan, self.lidarBeatCallback)
@@ -81,12 +86,23 @@ class HealthMonitor():
         self.transformedIMUSub_  = rospy.Subscriber(self.transformedIMUTopic, Imu, self.imuCallback)
         self.humanLocalizeSub_   = rospy.Subscriber(self.humanLocalizeTopic, Objects, self.humanLocalizeCallback)
         # self.humanDetectionSub_ = rospy.Subscriber(self.humanDetectionTopic, BoundingBoxes, self.humanDetectionCallback)
+        # self.humanFilterSub_ = rospy.Subscriber(self.humanFilterTopic, WorldEvidence, self.humanFilterCallback)
 
         # status publisher
         self.statusTopic_ = str(rospy.get_param("health_status", "/health_status"))
         self.outputMsg    = watchStatus()
         self.healthPub_   = rospy.Publisher(self.statusTopic_, watchStatus, queue_size=10)
 
+        # tf listener
+        self.tfBuffer = Buffer()
+        self.slamListener = TransformListener(self.tfBuffer)
+
+    def slamCheck(self):
+        try:
+            transform = self.tfBuffer.lookup_transform("/map", "/base_link", queue_size=1)
+            self.callbackHandle(transform, 'slam')
+        except (LookupException, ConnectivityException, ExtrapolationException):
+            pass
 
     def callbackHandle(self, msg, system):
         # udpates the system descriptor's array entry with last message receieved time
@@ -118,6 +134,9 @@ class HealthMonitor():
 
     def humanDetectionCallback(self, msg):
         self.callbackHandle(msg, 'detection')
+    
+    def humanFilterCallback(self, msg):
+        self.callbackHandle(msg, 'detection_filtering')
 
 
 if __name__ == '__main__':

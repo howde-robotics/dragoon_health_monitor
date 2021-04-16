@@ -6,5 +6,5 @@
     <param name = 'realsense_depth_beat'  value = '/camera/depth/image_rect_raw' type = "string" />
     <param name = 'transform_imu_beat'    value = '/imu' type = "string" />
     <param name = 'human_beat'            value = '/ObjectPoses' type = "string" />
-    <param name = 'detection_beat'        value = '/darknet_ros/bounding_boxes' type = "string" />
+    <param name = 'detection_beat'        value = '/darknet_ros/detection_image' type = "string" />
 </launch>
