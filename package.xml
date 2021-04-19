@@ -16,6 +16,8 @@
   <depend>tf</depend>
   <depend>actionlib_msgs</depend>
   <depend>dragoon_messages</depend>
+  <depend>darknet_ros_msgs</depend>
+  <depend>wire_msgs</depend>
 
   <exec_depend>message_generation</exec_depend>
 

@@ -7,8 +7,7 @@ from tf2_ros import TransformListener, Buffer, LookupException, ConnectivityExce
 from dragoon_messages.msg import watchHeartbeat, watchStatus, Objects
 from geometry_msgs.msg import TransformStamped
 from sensor_msgs.msg import Image, LaserScan, Imu
-# from darknet_ros.msg import BoundingBoxes
-# from wire.msg import WorldEvidence
+from wire_msgs.msg import WorldState
 
 
 class HealthMonitor():
@@ -85,8 +84,8 @@ class HealthMonitor():
         self.realSenseDepthSub_  = rospy.Subscriber(self.realSenseDepthTopic, Image, self.realSenseDepthCallback)
         self.transformedIMUSub_  = rospy.Subscriber(self.transformedIMUTopic, Imu, self.imuCallback)
         self.humanLocalizeSub_   = rospy.Subscriber(self.humanLocalizeTopic, Objects, self.humanLocalizeCallback)
-        # self.humanDetectionSub_ = rospy.Subscriber(self.humanDetectionTopic, BoundingBoxes, self.humanDetectionCallback)
-        # self.humanFilterSub_ = rospy.Subscriber(self.humanFilterTopic, WorldEvidence, self.humanFilterCallback)
+        self.humanDetectionSub_ = rospy.Subscriber(self.humanDetectionTopic, Image, self.humanDetectionCallback)
+        self.humanFilterSub_ = rospy.Subscriber(self.humanFilterTopic, WorldState, self.humanFilterCallback)
 
         # status publisher
         self.statusTopic_ = str(rospy.get_param("health_status", "/health_status"))
@@ -99,7 +98,7 @@ class HealthMonitor():
 
     def slamCheck(self):
         try:
-            transform = self.tfBuffer.lookup_transform("/map", "/base_link", queue_size=1)
+            transform = self.tfBuffer.lookup_transform("map", "base_link", rospy.Time())
             self.callbackHandle(transform, 'slam')
         except (LookupException, ConnectivityException, ExtrapolationException):
             pass
@@ -107,7 +106,7 @@ class HealthMonitor():
     def callbackHandle(self, msg, system):
         # udpates the system descriptor's array entry with last message receieved time
         sys_index = self.heartbeats.index(system)
-        self.healthLastTime[sys_index] = msg.header.stamp.to_nsec()
+        self.healthLastTime[sys_index] = rospy.Time.now().to_nsec()
 
         # if want to ignore the time
         # self.checkError[sys_index] = True

@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   rosunit
   actionlib_msgs
   dragoon_messages
+  darknet_ros_msgs
+  wire_msgs
 )
 
 # generate_messages(
