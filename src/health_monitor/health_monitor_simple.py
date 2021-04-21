@@ -73,7 +73,7 @@ class HealthMonitor():
         self.transformedIMUTopic  = str(rospy.get_param('transform_imu_beat', '/imu'))
 
         # global real time status update topics
-        self.humanLocalizeTopic  = str(rospy.get_param('human_beat', '/ObjectPoses'))
+        self.humanLocalizeTopic  = str(rospy.get_param('human_beat', '/RelLocHeartbeat'))
         self.humanDetectionTopic = str(rospy.get_param('detection_beat', '/darknet_ros/detection_image'))
         self.humanFilterTopic = str(rospy.get_param('filter_beat', '/world_state'))
 
