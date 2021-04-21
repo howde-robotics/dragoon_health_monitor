@@ -4,11 +4,11 @@ import rospy
 import numpy as np
 import roslaunch as rl
 from tf2_ros import TransformListener, Buffer, LookupException, ConnectivityException, ExtrapolationException
-from dragoon_messages.msg import watchHeartbeat, watchStatus, Objects
+from dragoon_messages.msg import watchHeartbeat, watchStatus
 from geometry_msgs.msg import TransformStamped
 from sensor_msgs.msg import Image, LaserScan, Imu
 from wire_msgs.msg import WorldState
-
+from std_msgs.msg import Empty
 
 class HealthMonitor():
     # main health monitor class
@@ -83,7 +83,7 @@ class HealthMonitor():
         self.realSenseRGBSub_    = rospy.Subscriber(self.realSenseRGBTopic, Image, self.realSenseRGBCallback)
         self.realSenseDepthSub_  = rospy.Subscriber(self.realSenseDepthTopic, Image, self.realSenseDepthCallback)
         self.transformedIMUSub_  = rospy.Subscriber(self.transformedIMUTopic, Imu, self.imuCallback)
-        self.humanLocalizeSub_   = rospy.Subscriber(self.humanLocalizeTopic, Objects, self.humanLocalizeCallback)
+        self.humanLocalizeSub_   = rospy.Subscriber(self.humanLocalizeTopic, Empty, self.humanLocalizeCallback)
         self.humanDetectionSub_ = rospy.Subscriber(self.humanDetectionTopic, Image, self.humanDetectionCallback)
         self.humanFilterSub_ = rospy.Subscriber(self.humanFilterTopic, WorldState, self.humanFilterCallback)
 
